@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JunimoStats | Stardew Valley Analytics</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-season="spring">
+
+  <div class="app-container">
+    
+    <!-- NIVEL 1: Navegación Superior (Pestañas estilo Stardew) -->
+    <header class="top-navbar">
+      <div class="brand">
+        <h1 class="brand-title">JunimoStats</h1>
+      </div>
+
+      <nav class="tab-nav" aria-label="Navegación principal">
+        <a href="#resumen" class="tab-item active">Resumen</a>
+        <a href="#economia" class="tab-item">Economía</a>
+        <a href="#relaciones" class="tab-item">Relaciones</a>
+        <a href="#centro-comunitario" class="tab-item">Centro Com.</a>
+      </nav>
+
+      <div class="search-box">
+        <input type="search" id="global-search" placeholder="Buscar cultivo, aldeano o lote...">
+      </div>
+    </header>
+
+    <!-- TABLERO PRINCIPAL (Pergamino) -->
+    <div class="parchment-board">
+      
+      <!-- NIVEL 2: HUD de la Granja (Filtros Globales) -->
+      <section class="farm-hud" aria-label="Estado actual de la granja">
+        <div class="hud-group">
+          <div class="hud-field">
+            <label for="season-select">Estación:</label>
+            <select id="season-select">
+              <option value="spring" selected>Primavera</option>
+              <option value="summer">Verano</option>
+              <option value="fall">Otoño</option>
+              <option value="winter">Invierno</option>
+            </select>
+          </div>
+
+          <div class="hud-field">
+            <label for="day-input">Día:</label>
+            <input type="number" id="day-input" min="1" max="28" value="14">
+          </div>
+
+          <div class="hud-field">
+            <label for="weather-select">Clima:</label>
+            <select id="weather-select">
+              <option value="sunny">Soleado</option>
+              <option value="rainy" selected>Lluvia</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="hud-group">
+          <label class="pill-toggle">
+            <input type="checkbox" id="mod-tiller" checked>
+            <span>Labrador (+10%)</span>
+          </label>
+          <label class="pill-toggle">
+            <input type="checkbox" id="mod-artisan">
+            <span>Artesano (+40%)</span>
+          </label>
+          <div class="hud-field gold-field">
+            <label for="gold-budget">Oro:</label>
+            <input type="number" id="gold-budget" value="15000" step="500" min="0">
+            <span class="gold-unit">g</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTENIDO PRINCIPAL -->
+      <main class="dashboard-content">
+        
+        <!-- FILA 1: Tarjetas KPI -->
+        <section class="kpi-grid">
+          <article class="card kpi-card">
+            <span class="kpi-label">Mejor ROI Hoy</span>
+            <strong class="kpi-value" id="kpi-best-crop">Fresa</strong>
+            <small class="kpi-sub">+20.8g / día neto · Semilla: 100g</small>
+          </article>
+
+          <article class="card kpi-card">
+            <span class="kpi-label">Próximo Cumpleaños</span>
+            <strong class="kpi-value" id="kpi-next-bday">Haley (Hoy)</strong>
+            <small class="kpi-sub">Ama: Girasol, Coco, Pastel Rosa</small>
+          </article>
+
+          <article class="card kpi-card">
+            <span class="kpi-label">Centro Comunitario</span>
+            <strong class="kpi-value" id="kpi-cc-progress">42%</strong>
+            <small class="kpi-sub">Invernadero: faltan 2 ítems</small>
+          </article>
+        </section>
+
+        <!-- FILA 2: Gráfica de Economía + Alerta Estacional CC -->
+        <section class="analytics-grid">
+          
+          <!-- Módulo Economía -->
+          <article class="card chart-card">
+            <header class="card-header">
+              <div>
+                <h2>Rentabilidad de Cultivos</h2>
+                <p class="card-subtitle">Inversión inicial vs. Ganancia diaria neta</p>
+              </div>
+              <select id="process-type" aria-label="Tipo de procesamiento">
+                <option value="raw">Venta Cruda</option>
+                <option value="keg">Barril (Vino/Jugo)</option>
+                <option value="jar">Tarro de Conservas</option>
+              </select>
+            </header>
+            <div class="chart-container">
+              <canvas id="crops-scatter-chart"></canvas>
+              <!-- Placeholder visual mientras conectas Chart.js -->
+              <p class="chart-placeholder">Espacio para gráfica de dispersión (Chart.js)</p>
+            </div>
+          </article>
+
+          <!-- Módulo Centro Comunitario -->
+          <article class="card alert-card">
+            <header class="card-header">
+              <h2>Peligro Estacional</h2>
+              <span class="badge urgent" id="season-badge">Solo Primavera</span>
+            </header>
+            <ul class="checklist" id="seasonal-cc-list">
+              <li>
+                <label>
+                  <input type="checkbox">
+                  <span class="item-info">
+                    <strong>Pez Gato</strong>
+                    <small>Río · Solo con Lluvia</small>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="checkbox">
+                  <span class="item-info">
+                    <strong>Chirivía Calidad Oro (x5)</strong>
+                    <small>Lote Cultivos de Calidad</small>
+                  </span>
+                </label>
+              </li>
+              <li class="completed">
+                <label>
+                  <input type="checkbox" checked>
+                  <span class="item-info">
+                    <strong>Coliflor</strong>
+                    <small>Lote Cultivos de Primavera</small>
+                  </span>
+                </label>
+              </li>
+            </ul>
+            <button type="button" class="btn-secondary">Ver árbol de dependencias</button>
+          </article>
+
+        </section>
+
+        <!-- FILA 3: Buscador Inverso de Relaciones -->
+        <section class="card relations-widget">
+          <header class="card-header">
+            <div>
+              <h2>Buscador Inverso de Regalos</h2>
+              <p class="card-subtitle">Agrega lo que tienes en tu cofre para ver a quién le encanta</p>
+            </div>
+          </header>
+
+          <div class="inventory-selector">
+            <input type="text" id="item-tag-input" placeholder="Escribe un ítem y presiona Enter (ej. Café, Amatista)...">
+            <div class="selected-tags" id="selected-items">
+              <span class="tag">Café <button type="button" aria-label="Quitar Café">×</button></span>
+              <span class="tag">Amatista <button type="button" aria-label="Quitar Amatista">×</button></span>
+              <span class="tag">Queso de cabra <button type="button" aria-label="Quitar Queso de cabra">×</button></span>
+            </div>
+          </div>
+
+          <div class="villager-matches" id="villager-results">
+            <div class="villager-card">
+              <strong>Abigail</strong>
+              <span class="match-love">Ama: Amatista</span>
+            </div>
+            <div class="villager-card">
+              <strong>Harvey</strong>
+              <span class="match-love">Ama: Café</span>
+            </div>
+            <div class="villager-card">
+              <strong>Leah</strong>
+              <span class="match-love">Ama: Queso de cabra</span>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Script rápido para probar el cambio de tema por estación -->
+  <script>
+    const seasonSelect = document.getElementById('season-select');
+    const seasonBadge = document.getElementById('season-badge');
+    const seasonNames = {
+      spring: 'Solo Primavera',
+      summer: 'Solo Verano',
+      fall: 'Solo Otoño',
+      winter: 'Solo Invierno'
+    };
+
+    seasonSelect.addEventListener('change', (e) => {
+      const season = e.target.value;
+      document.body.setAttribute('data-season', season);
+      seasonBadge.textContent = seasonNames[season];
+    });
+  </script>
+
+</body>
+</html>
