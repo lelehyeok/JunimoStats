@@ -1,8 +1,8 @@
 import express from 'express';
-import moongose from 'mongoose';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -19,7 +19,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
     message: 'Servidor JunimoStats funcionando correctamente',
-    dbEstado: moongose.connection.readyState === 1 ? 'Conectado' : 'Desconectado',
+    dbEstado: mongoose.connection.readyState === 1 ? 'Conectado' : 'Desconectado',
   });
 });
 
