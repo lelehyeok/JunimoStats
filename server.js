@@ -24,19 +24,23 @@ app.get('/api/health', (req, res) => {
 });
 
 async function startServer() {
-    try {
-        await moongose.connect(process.env.MONGO_URI, {
-            dbName: junimostats,
-        });
-        console.log('Conexión a la base de datos establecida correctamente');
-        if (process.env.NODE_ENV === 'production') {
-            app.listen(PORT, () => {
-                console.log(`Servidor JunimoStats escuchando en el puerto ${PORT}`);
-            });
-        } catch (error) {
-            console.error('Error al conectar a la base de datos:', error);
-            process.exit(1);
-        }
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: 'junimostats'
+    });
+    console.log('Conexión a la base de datos establecida correctamente');
 
-        strartServer();
-        export default app;
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(PORT, () => {
+        console.log(`Servidor JunimoStats escuchando en el puerto ${PORT}`);
+      });
+    }
+  } catch (error) {
+    console.error('Error al conectar a la base de datos:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
+
+export default app;
