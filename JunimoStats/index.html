@@ -4,219 +4,479 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JunimoStats | Stardew Valley Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body data-season="spring">
 
-  <div class="app-container">
-    
-    <!-- NIVEL 1: Navegación Superior (Pestañas estilo Stardew) -->
-    <header class="top-navbar">
-      <div class="brand">
-        <h1 class="brand-title">JunimoStats</h1>
-      </div>
+  <div class="stardew-window">
 
+    <!-- PESTAÑAS SUPERIORES -->
+    <header class="top-tabs-bar">
       <nav class="tab-nav" aria-label="Navegación principal">
-        <a href="#resumen" class="tab-item active">Resumen</a>
-        <a href="#economia" class="tab-item">Economía</a>
-        <a href="#relaciones" class="tab-item">Relaciones</a>
-        <a href="#centro-comunitario" class="tab-item">Centro Com.</a>
+        <button type="button" class="stardew-tab active" data-tab="resumen" title="Resumen">
+          <svg class="pixel-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="4" y="2" width="8" height="2" fill="#5b2b10"/>
+            <rect x="3" y="4" width="10" height="10" fill="#a83232"/>
+            <rect x="5" y="6" width="6" height="4" fill="#d9534f"/>
+            <rect x="7" y="8" width="2" height="2" fill="#f3ae59"/>
+          </svg>
+          <span class="tab-label">Resumen</span>
+        </button>
+
+        <button type="button" class="stardew-tab" data-tab="economia" title="Economía">
+          <svg class="pixel-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="5" y="2" width="6" height="12" fill="#e6a817"/>
+            <rect x="3" y="4" width="10" height="8" fill="#e6a817"/>
+            <rect x="5" y="4" width="6" height="8" fill="#ffd94a"/>
+            <rect x="7" y="5" width="2" height="6" fill="#cc7628"/>
+          </svg>
+          <span class="tab-label">Economía</span>
+        </button>
+
+        <button type="button" class="stardew-tab" data-tab="relaciones" title="Relaciones">
+          <svg class="pixel-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="2" y="4" width="5" height="4" fill="#d63031"/>
+            <rect x="9" y="4" width="5" height="4" fill="#d63031"/>
+            <rect x="3" y="3" width="3" height="1" fill="#d63031"/>
+            <rect x="10" y="3" width="3" height="1" fill="#d63031"/>
+            <rect x="4" y="8" width="8" height="3" fill="#d63031"/>
+            <rect x="6" y="11" width="4" height="2" fill="#d63031"/>
+            <rect x="7" y="13" width="2" height="1" fill="#d63031"/>
+          </svg>
+          <span class="tab-label">Relaciones</span>
+        </button>
+
+        <button type="button" class="stardew-tab" data-tab="centro-comunitario" title="Centro Comunitario">
+          <svg class="pixel-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="7" y="1" width="2" height="14" fill="#f1c40f"/>
+            <rect x="1" y="7" width="14" height="2" fill="#f1c40f"/>
+            <rect x="4" y="4" width="8" height="8" fill="#f39c12"/>
+            <rect x="6" y="6" width="4" height="4" fill="#fff59d"/>
+          </svg>
+          <span class="tab-label">Centro Com.</span>
+        </button>
       </nav>
 
-      <div class="search-box">
-        <input type="search" id="global-search" placeholder="Buscar cultivo, aldeano o lote...">
+      <div class="window-controls">
+        <div class="search-slot">
+          <input type="search" id="global-search" placeholder="Buscar cultivo o aldeano...">
+        </div>
+        <button type="button" class="close-btn" id="reset-view-btn" title="Volver al resumen" aria-label="Volver al resumen">X</button>
       </div>
     </header>
 
-    <!-- TABLERO PRINCIPAL (Pergamino) -->
-    <div class="parchment-board">
-      
-      <!-- NIVEL 2: HUD de la Granja (Filtros Globales) -->
-      <section class="farm-hud" aria-label="Estado actual de la granja">
-        <div class="hud-group">
-          <div class="hud-field">
-            <label for="season-select">Estación:</label>
-            <select id="season-select">
-              <option value="spring" selected>Primavera</option>
-              <option value="summer">Verano</option>
-              <option value="fall">Otoño</option>
-              <option value="winter">Invierno</option>
-            </select>
+    <!-- TABLERO PRINCIPAL DE MADERA -->
+    <div class="wood-frame">
+
+      <!-- ====================================================
+           PANEL SUPERIOR: ESTADO DE LA GRANJA (FIJO EN TODAS LAS PESTAÑAS)
+           ==================================================== -->
+      <section class="panel-hud" aria-label="Estado de la granja">
+        <div class="hud-top-row">
+          <div class="farm-header">
+            <div class="avatar-frame" aria-label="Mascota Junimo">
+              <svg class="junimo-svg" viewBox="0 0 16 16" aria-hidden="true">
+                <rect x="7" y="1" width="2" height="2" fill="#3d8b40"/>
+                <rect x="5" y="3" width="6" height="2" fill="#7ed957"/>
+                <rect x="3" y="5" width="10" height="7" fill="#7ed957"/>
+                <rect x="5" y="12" width="6" height="1" fill="#7ed957"/>
+                <rect x="5" y="7" width="2" height="2" fill="#2c1608"/>
+                <rect x="9" y="7" width="2" height="2" fill="#2c1608"/>
+                <rect x="2" y="8" width="1" height="2" fill="#5b2b10"/>
+                <rect x="13" y="8" width="1" height="2" fill="#5b2b10"/>
+                <rect x="5" y="13" width="1" height="2" fill="#5b2b10"/>
+                <rect x="10" y="13" width="1" height="2" fill="#5b2b10"/>
+              </svg>
+            </div>
+            <div class="farm-title-block">
+              <h1 class="farm-name" id="farm-display-name">JunimoStats</h1>
+              <span class="save-status" id="save-file-name">Sin partida cargada</span>
+            </div>
           </div>
 
-          <div class="hud-field">
-            <label for="day-input">Día:</label>
-            <input type="number" id="day-input" min="1" max="28" value="14">
-          </div>
+          <div class="farm-stats-bar">
+            <div class="stat-line">
+              <label for="gold-budget">Fondos:</label>
+              <div class="stat-input-wrap">
+                <input type="number" id="gold-budget" value="15000" step="500" min="0">
+                <span>g</span>
+              </div>
+            </div>
 
-          <div class="hud-field">
-            <label for="weather-select">Clima:</label>
-            <select id="weather-select">
-              <option value="sunny">Soleado</option>
-              <option value="rainy" selected>Lluvia</option>
-            </select>
+            <div class="stat-line">
+              <label for="season-select">Fecha:</label>
+              <div class="date-controls">
+                <span>Día</span>
+                <input type="number" id="day-input" min="1" max="28" value="14">
+                <span>de</span>
+                <select id="season-select">
+                  <option value="spring" selected>Primavera</option>
+                  <option value="summer">Verano</option>
+                  <option value="fall">Otoño</option>
+                  <option value="winter">Invierno</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="stat-line">
+              <label for="weather-select">Clima:</label>
+              <select id="weather-select">
+                <option value="sunny">Soleado</option>
+                <option value="rainy" selected>Lluvia</option>
+              </select>
+            </div>
+
+            <!-- Subir archivo de partida de Stardew Valley -->
+            <div class="stat-line upload-slot">
+              <input type="file" id="save-file-input" class="sr-only" aria-label="Subir archivo de partida de Stardew Valley">
+              <label for="save-file-input" class="upload-trigger">
+                <svg class="pixel-icon-sm" viewBox="0 0 16 16" aria-hidden="true">
+                  <rect x="7" y="2" width="2" height="8" fill="#fff9ea"/>
+                  <rect x="5" y="4" width="6" height="2" fill="#fff9ea"/>
+                  <rect x="3" y="11" width="10" height="3" fill="#fff9ea"/>
+                </svg>
+                <span>Cargar Partida</span>
+              </label>
+            </div>
           </div>
         </div>
 
-        <div class="hud-group">
-          <label class="pill-toggle">
-            <input type="checkbox" id="mod-tiller" checked>
-            <span>Labrador (+10%)</span>
-          </label>
-          <label class="pill-toggle">
-            <input type="checkbox" id="mod-artisan">
-            <span>Artesano (+40%)</span>
-          </label>
-          <div class="hud-field gold-field">
-            <label for="gold-budget">Oro:</label>
-            <input type="number" id="gold-budget" value="15000" step="500" min="0">
-            <span class="gold-unit">g</span>
+        <!-- Fila de selectores por cada una de las 5 habilidades -->
+        <div class="skills-grid" aria-label="Profesiones por habilidad">
+          <div class="skill-field">
+            <label for="skill-farming">Agricultura</label>
+            <select id="skill-farming">
+              <option value="none">Sin profesión</option>
+              <option value="tiller" selected>Labrador (+10% cultivos)</option>
+              <option value="artisan">Artesano (+40% artesanales)</option>
+              <option value="agriculturist">Agricultor (+10% velocidad)</option>
+              <option value="rancher">Ranchero (+20% animales)</option>
+              <option value="coopmaster">Avicultor</option>
+              <option value="shepherd">Pastor</option>
+            </select>
+          </div>
+
+          <div class="skill-field">
+            <label for="skill-mining">Minería</label>
+            <select id="skill-mining">
+              <option value="none" selected>Sin profesión</option>
+              <option value="miner">Minero (+1 mena)</option>
+              <option value="blacksmith">Herrero (+50% lingotes)</option>
+              <option value="prospector">Prospector (x2 carbón)</option>
+              <option value="geologist">Geólogo (gemas dobles)</option>
+              <option value="excavator">Excavador (x2 geodas)</option>
+              <option value="gemologist">Gemólogo (+30% gemas)</option>
+            </select>
+          </div>
+
+          <div class="skill-field">
+            <label for="skill-foraging">Recolección</label>
+            <select id="skill-foraging">
+              <option value="none" selected>Sin profesión</option>
+              <option value="forester">Silvicultor (+25% madera)</option>
+              <option value="lumberjack">Leñador (madera noble)</option>
+              <option value="tapper">Sangrador (+25% sirope)</option>
+              <option value="gatherer">Recolector (x2 botín)</option>
+              <option value="botanist">Botánico (calidad iridio)</option>
+              <option value="tracker">Rastreador</option>
+            </select>
+          </div>
+
+          <div class="skill-field">
+            <label for="skill-fishing">Pesca</label>
+            <select id="skill-fishing">
+              <option value="none" selected>Sin profesión</option>
+              <option value="fisher">Pescador (+25% peces)</option>
+              <option value="angler">Anzuelador (+50% peces)</option>
+              <option value="pirate">Pirata (x2 tesoros)</option>
+              <option value="trapper">Trampero</option>
+              <option value="mariner">Marinero (sin basura)</option>
+              <option value="luremaster">Maestro de cebos</option>
+            </select>
+          </div>
+
+          <div class="skill-field">
+            <label for="skill-combat">Combate</label>
+            <select id="skill-combat">
+              <option value="none" selected>Sin profesión</option>
+              <option value="fighter">Luchador (+10% daño)</option>
+              <option value="brute">Bruto (+15% daño)</option>
+              <option value="defender">Defensor (+25 salud)</option>
+              <option value="scout">Explorador (+50% crítico)</option>
+              <option value="acrobat">Acróbata</option>
+              <option value="desperado">Desperado (críticos x2)</option>
+            </select>
           </div>
         </div>
       </section>
 
-      <!-- CONTENIDO PRINCIPAL -->
-      <main class="dashboard-content">
-        
-        <!-- FILA 1: Tarjetas KPI -->
-        <section class="kpi-grid">
-          <article class="card kpi-card">
-            <span class="kpi-label">Mejor ROI Hoy</span>
-            <strong class="kpi-value" id="kpi-best-crop">Fresa</strong>
-            <small class="kpi-sub">+20.8g / día neto · Semilla: 100g</small>
-          </article>
+      <!-- BARRA DIVISORIA HORIZONTAL -->
+      <div class="wood-divider" aria-hidden="true"></div>
 
-          <article class="card kpi-card">
-            <span class="kpi-label">Próximo Cumpleaños</span>
-            <strong class="kpi-value" id="kpi-next-bday">Haley (Hoy)</strong>
-            <small class="kpi-sub">Ama: Girasol, Coco, Pastel Rosa</small>
-          </article>
+      <!-- ====================================================
+           CONTENEDOR DE VISTAS POR PESTAÑA
+           ==================================================== -->
+      <main class="panel-main">
 
-          <article class="card kpi-card">
-            <span class="kpi-label">Centro Comunitario</span>
-            <strong class="kpi-value" id="kpi-cc-progress">42%</strong>
-            <small class="kpi-sub">Invernadero: faltan 2 ítems</small>
-          </article>
-        </section>
+        <!-- ================================================
+             PESTAÑA 1: RESUMEN
+             ================================================ -->
+        <section id="view-resumen" class="tab-view active">
+          <div class="kpi-slots-grid">
+            <article class="inv-slot kpi-slot">
+              <span class="slot-index">1</span>
+              <span class="kpi-label">Mejor ROI Hoy</span>
+              <strong class="kpi-value" id="kpi-best-crop">Fresa</strong>
+              <small class="kpi-sub" id="kpi-best-crop-sub">+20.8g/día · 100g</small>
+            </article>
 
-        <!-- FILA 2: Gráfica de Economía + Alerta Estacional CC -->
-        <section class="analytics-grid">
-          
-          <!-- Módulo Economía -->
-          <article class="card chart-card">
-            <header class="card-header">
-              <div>
-                <h2>Rentabilidad de Cultivos</h2>
-                <p class="card-subtitle">Inversión inicial vs. Ganancia diaria neta</p>
+            <article class="inv-slot kpi-slot">
+              <span class="slot-index">2</span>
+              <span class="kpi-label">Próx. Cumpleaños</span>
+              <strong class="kpi-value" id="kpi-next-bday">Haley (Día 14)</strong>
+              <small class="kpi-sub" id="kpi-next-bday-sub">Ama: Girasol, Coco</small>
+            </article>
+
+            <article class="inv-slot kpi-slot">
+              <span class="slot-index">3</span>
+              <span class="kpi-label">Centro Comunitario</span>
+              <strong class="kpi-value" id="kpi-cc-progress">33%</strong>
+              <small class="kpi-sub" id="kpi-cc-sub">2 de 6 ítems rastreados</small>
+            </article>
+          </div>
+
+          <div class="analytics-grid">
+            <article class="inv-panel chart-card">
+              <header class="panel-header">
+                <h2>Rentabilidad de Cultivos (<span class="current-season-label">Primavera</span>)</h2>
+                <select id="process-type" aria-label="Tipo de procesamiento">
+                  <option value="raw">Venta Cruda</option>
+                  <option value="keg">Barril (Vino/Jugo)</option>
+                  <option value="jar">Tarro de Conservas</option>
+                </select>
+              </header>
+              <div class="chart-container">
+                <canvas id="crops-scatter-chart" width="640" height="260"></canvas>
               </div>
-              <select id="process-type" aria-label="Tipo de procesamiento">
-                <option value="raw">Venta Cruda</option>
-                <option value="keg">Barril (Vino/Jugo)</option>
-                <option value="jar">Tarro de Conservas</option>
-              </select>
+              <p class="chart-caption">Eje X: Costo de semilla (g) · Eje Y: Ganancia neta por día (g/día)</p>
+            </article>
+
+            <article class="inv-panel alert-card">
+              <header class="panel-header">
+                <h2>Peligro Estacional</h2>
+                <span class="season-pill" id="season-badge">Primavera</span>
+              </header>
+              <ul class="checklist" id="seasonal-cc-list">
+                <!-- Generado dinámicamente por estación -->
+              </ul>
+              <button type="button" class="wood-btn" id="goto-cc-btn">Ir al Centro Comunitario</button>
+            </article>
+          </div>
+
+          <section class="inv-panel chest-relations-box">
+            <header class="panel-header">
+              <h2>Cofre de Regalos (Vista Rápida)</h2>
+              <button type="button" class="wood-btn-inline" id="goto-rel-btn">Abrir módulo completo</button>
             </header>
-            <div class="chart-container">
-              <canvas id="crops-scatter-chart"></canvas>
-              <!-- Placeholder visual mientras conectas Chart.js -->
-              <p class="chart-placeholder">Espacio para gráfica de dispersión (Chart.js)</p>
+            <div class="villager-matches" id="summary-villager-results">
+              <!-- Sincronizado con el cofre -->
             </div>
-          </article>
-
-          <!-- Módulo Centro Comunitario -->
-          <article class="card alert-card">
-            <header class="card-header">
-              <h2>Peligro Estacional</h2>
-              <span class="badge urgent" id="season-badge">Solo Primavera</span>
-            </header>
-            <ul class="checklist" id="seasonal-cc-list">
-              <li>
-                <label>
-                  <input type="checkbox">
-                  <span class="item-info">
-                    <strong>Pez Gato</strong>
-                    <small>Río · Solo con Lluvia</small>
-                  </span>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox">
-                  <span class="item-info">
-                    <strong>Chirivía Calidad Oro (x5)</strong>
-                    <small>Lote Cultivos de Calidad</small>
-                  </span>
-                </label>
-              </li>
-              <li class="completed">
-                <label>
-                  <input type="checkbox" checked>
-                  <span class="item-info">
-                    <strong>Coliflor</strong>
-                    <small>Lote Cultivos de Primavera</small>
-                  </span>
-                </label>
-              </li>
-            </ul>
-            <button type="button" class="btn-secondary">Ver árbol de dependencias</button>
-          </article>
-
+          </section>
         </section>
 
-        <!-- FILA 3: Buscador Inverso de Relaciones -->
-        <section class="card relations-widget">
-          <header class="card-header">
-            <div>
-              <h2>Buscador Inverso de Regalos</h2>
-              <p class="card-subtitle">Agrega lo que tienes en tu cofre para ver a quién le encanta</p>
-            </div>
-          </header>
+        <!-- ================================================
+             PESTAÑA 2: ECONOMÍA Y CULTIVOS
+             ================================================ -->
+        <section id="view-economia" class="tab-view">
+          <div class="inv-panel">
+            <header class="panel-header">
+              <h2>Agregar Cultivo a la Simulación (<span class="current-season-label">Primavera</span>)</h2>
+              <span class="season-pill" id="econ-season-pill">Solo cultivos de Primavera</span>
+            </header>
 
-          <div class="inventory-selector">
-            <input type="text" id="item-tag-input" placeholder="Escribe un ítem y presiona Enter (ej. Café, Amatista)...">
-            <div class="selected-tags" id="selected-items">
-              <span class="tag">Café <button type="button" aria-label="Quitar Café">×</button></span>
-              <span class="tag">Amatista <button type="button" aria-label="Quitar Amatista">×</button></span>
-              <span class="tag">Queso de cabra <button type="button" aria-label="Quitar Queso de cabra">×</button></span>
+            <form id="add-crop-form" class="crop-adder-form">
+              <div class="form-field">
+                <label for="crop-select">Cultivo permitido en estación</label>
+                <select id="crop-select" required></select>
+              </div>
+
+              <div class="form-field small-field">
+                <label for="crop-qty">Semillas</label>
+                <input type="number" id="crop-qty" value="20" min="1" max="999" required>
+              </div>
+
+              <div class="form-field">
+                <label for="econ-process-type">Procesamiento</label>
+                <select id="econ-process-type">
+                  <option value="raw">Venta Cruda</option>
+                  <option value="keg">Barril (Vino/Jugo)</option>
+                  <option value="jar">Tarro de Conservas</option>
+                </select>
+              </div>
+
+              <button type="submit" class="wood-btn-inline">Agregar Cultivo</button>
+            </form>
+          </div>
+
+          <div class="inv-panel">
+            <header class="panel-header">
+              <h2>Comparativa de Rentabilidad y Punto de No Retorno</h2>
+              <span class="sub-note" id="days-left-badge">Quedan 14 días en la estación</span>
+            </header>
+
+            <div class="table-wrap">
+              <table class="stardew-table">
+                <thead>
+                  <tr>
+                    <th>Cultivo</th>
+                    <th>Semillas</th>
+                    <th>Inversión</th>
+                    <th>Crecimiento</th>
+                    <th>Último Día</th>
+                    <th>Ganancia/Día</th>
+                    <th>Ganancia Total</th>
+                    <th>Estado</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="active-crops-tbody">
+                  <!-- Filas dinámicas -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================
+             PESTAÑA 3: RELACIONES
+             ================================================ -->
+        <section id="view-relaciones" class="tab-view">
+          <div class="two-col-grid">
+            <!-- Buscador inverso completo -->
+            <article class="inv-panel">
+              <header class="panel-header">
+                <h2>Buscador Inverso de Regalos</h2>
+              </header>
+
+              <div class="inventory-selector">
+                <input type="text" id="item-tag-input" placeholder="Escribe un ítem y presiona Enter (ej. Café, Amatista, Queso)...">
+                <button type="button" class="wood-btn-inline" id="add-tag-btn">Añadir</button>
+              </div>
+
+              <div class="selected-tags" id="selected-items"></div>
+
+              <div class="villager-matches" id="villager-results"></div>
+            </article>
+
+            <!-- Calculadora de corazones -->
+            <article class="inv-panel">
+              <header class="panel-header">
+                <h2>Calculadora de Corazones</h2>
+              </header>
+
+              <div class="heart-calc-form">
+                <div class="form-field">
+                  <label for="calc-villager">Aldeano</label>
+                  <select id="calc-villager">
+                    <option value="Abigail">Abigail (Cumple: Otoño 13)</option>
+                    <option value="Haley">Haley (Cumple: Primavera 14)</option>
+                    <option value="Harvey">Harvey (Cumple: Invierno 14)</option>
+                    <option value="Leah">Leah (Cumple: Invierno 23)</option>
+                    <option value="Sebastian">Sebastian (Cumple: Invierno 10)</option>
+                    <option value="Shane">Shane (Cumple: Primavera 20)</option>
+                  </select>
+                </div>
+
+                <div class="calc-inline-row">
+                  <div class="form-field">
+                    <label for="calc-current-hearts">Corazones actuales</label>
+                    <input type="number" id="calc-current-hearts" min="0" max="9" value="3">
+                  </div>
+
+                  <div class="form-field">
+                    <label for="calc-target-hearts">Meta de corazones</label>
+                    <input type="number" id="calc-target-hearts" min="1" max="10" value="8">
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="calc-gift-tier">Tipo de regalo (2 veces por semana)</label>
+                  <select id="calc-gift-tier">
+                    <option value="80">Regalo Amado normal (+80 pts)</option>
+                    <option value="100">Regalo Amado calidad Plata (+100 pts)</option>
+                    <option value="120">Regalo Amado calidad Oro (+120 pts)</option>
+                    <option value="45">Regalo Gustado normal (+45 pts)</option>
+                  </select>
+                </div>
+
+                <div class="inv-slot calc-output" id="heart-calc-result">
+                  <strong>Estimación:</strong>
+                  <span id="heart-calc-text">Calculando...</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Grafo / Clúster de gustos en común -->
+          <section class="inv-panel">
+            <header class="panel-header">
+              <h2>Red de Gustos en Común (Nodos Compartidos)</h2>
+            </header>
+            <div class="shared-graph-grid" id="shared-tastes-grid">
+              <!-- Tarjetas de conexión generadas dinámicamente -->
+            </div>
+          </section>
+        </section>
+
+        <!-- ================================================
+             PESTAÑA 4: CENTRO COMUNITARIO
+             ================================================ -->
+        <section id="view-centro-comunitario" class="tab-view">
+          <!-- Progreso por recompensa -->
+          <div class="inv-panel">
+            <header class="panel-header">
+              <h2>Progreso por Recompensa Desbloqueable</h2>
+              <span class="season-pill" id="cc-global-badge">33% Completado</span>
+            </header>
+
+            <div class="rewards-progress-grid" id="cc-rewards-grid">
+              <!-- Barras dinámicas -->
             </div>
           </div>
 
-          <div class="villager-matches" id="villager-results">
-            <div class="villager-card">
-              <strong>Abigail</strong>
-              <span class="match-love">Ama: Amatista</span>
-            </div>
-            <div class="villager-card">
-              <strong>Harvey</strong>
-              <span class="match-love">Ama: Café</span>
-            </div>
-            <div class="villager-card">
-              <strong>Leah</strong>
-              <span class="match-love">Ama: Queso de cabra</span>
-            </div>
+          <!-- Checklist completo + Árbol de dependencias -->
+          <div class="analytics-grid">
+            <article class="inv-panel">
+              <header class="panel-header">
+                <h2>Checklist de Ruta Crítica</h2>
+                <select id="cc-filter-select" aria-label="Filtrar lotes">
+                  <option value="all">Todas las estaciones</option>
+                  <option value="current">Solo estación actual</option>
+                  <option value="pending">Solo pendientes</option>
+                </select>
+              </header>
+              <ul class="checklist" id="full-cc-list"></ul>
+            </article>
+
+            <article class="inv-panel">
+              <header class="panel-header">
+                <h2>Árbol de Dependencias</h2>
+              </header>
+              <div class="inv-slot dependency-box" id="dependency-viewer">
+                <p class="dep-empty">Haz clic en "Ver ruta" en cualquier ítem para revisar sus requisitos previos.</p>
+              </div>
+            </article>
           </div>
         </section>
 
       </main>
+
     </div>
   </div>
 
-  <!-- Script rápido para probar el cambio de tema por estación -->
-  <script>
-    const seasonSelect = document.getElementById('season-select');
-    const seasonBadge = document.getElementById('season-badge');
-    const seasonNames = {
-      spring: 'Solo Primavera',
-      summer: 'Solo Verano',
-      fall: 'Solo Otoño',
-      winter: 'Solo Invierno'
-    };
-
-    seasonSelect.addEventListener('change', (e) => {
-      const season = e.target.value;
-      document.body.setAttribute('data-season', season);
-      seasonBadge.textContent = seasonNames[season];
-    });
-  </script>
-
+  <script src="js/app.js"></script>
 </body>
 </html>

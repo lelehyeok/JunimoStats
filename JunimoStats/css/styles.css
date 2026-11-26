@@ -1,40 +1,63 @@
 /* =========================================
-   VARIABLES Y TEMAS POR ESTACIÓN
+   PALETA POR ESTACIÓN (EXTRAÍDA DEL ÍCONO)
    ========================================= */
 :root {
-  --bg-outer: #264631;      /* Marco exterior (Primavera) */
-  --bg-board: #f4e4bc;      /* Pergamino principal */
-  --bg-hud: #e9d5a1;        /* Pergamino intermedio */
-  --bg-card: #fff9ea;       /* Tarjetas limpias */
-  --bg-tab-inactive: #d8c292;
-  --border-wood: #6e3f19;   /* Madera oscura */
-  --border-soft: #c9a675;   /* Madera clara */
-  --text-main: #3b2313;
-  --text-muted: #7a583b;
-  --accent: #3d8b40;        /* Acento Primavera */
-  --accent-text: #ffffff;
-  --danger: #c0392b;
-  --radius-sm: 6px;
-  --radius-md: 10px;
+  /* PRIMAVERA: Verde agua + flor rosa/púrpura */
+  --bg-grad-top: #48a89f;
+  --bg-grad-bottom: #2f7d78;
+  --accent: #d948a0;
+  --accent-hover: #8c2d8f;
+  --avatar-sky: #f7a6db;
+
+  /* Colores fijos del marco de madera e inventario */
+  --wood-dark: #5b2b10;
+  --wood-mid: #cc7628;
+  --wood-light: #f3ae59;
+  --parchment: #f8cc92;
+  --slot-bg: #e7b57c;
+  --slot-shadow: #c28a52;
+  --slot-highlight: #ffdfb3;
+
+  /* Texto y estados */
+  --text-main: #441f0b;
+  --text-muted: #7e4926;
+  --danger: #b8292f;
+  --ok-green: #237a2d;
+
+  /* Fuentes */
+  --font-pixel: 'VT323', monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+/* VERANO: Menta suave + acento barco naranja */
 body[data-season="summer"] {
-  --bg-outer: #1d4e68;
-  --accent: #d97706;
+  --bg-grad-top: #7ec49c;
+  --bg-grad-bottom: #d4f2df;
+  --accent: #d96200;
+  --accent-hover: #a64600;
+  --avatar-sky: #fff275;
 }
 
+/* OTOÑO: Rojo quemado + naranja calabaza */
 body[data-season="fall"] {
-  --bg-outer: #5c2c16;
-  --accent: #c2410c;
+  --bg-grad-top: #c92b04;
+  --bg-grad-bottom: #ff7d00;
+  --accent: #b82500;
+  --accent-hover: #871a00;
+  --avatar-sky: #ffd447;
 }
 
+/* INVIERNO: Azul cielo/hielo + verde acebo */
 body[data-season="winter"] {
-  --bg-outer: #1e3a5f;
-  --accent: #0284c7;
+  --bg-grad-top: #6db5f7;
+  --bg-grad-bottom: #a8e8ff;
+  --accent: #0c8a1e;
+  --accent-hover: #076314;
+  --avatar-sky: #c7f1ff;
 }
 
 /* =========================================
-   BASE Y CONTENEDOR
+   BASE
    ========================================= */
 * {
   box-sizing: border-box;
@@ -43,415 +66,802 @@ body[data-season="winter"] {
 }
 
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--bg-outer);
+  font-family: var(--font-ui);
   color: var(--text-main);
-  padding: 1.5rem;
+  background: linear-gradient(180deg, var(--bg-grad-top) 0%, var(--bg-grad-bottom) 100%);
   min-height: 100vh;
-  transition: background-color 0.3s ease;
+  padding: 1.5rem;
 }
 
-.app-container {
-  max-width: 1320px;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.stardew-window {
+  max-width: 1240px;
   margin: 0 auto;
 }
 
+.pixel-icon {
+  width: 20px;
+  height: 20px;
+  shape-rendering: crispEdges;
+  flex-shrink: 0;
+}
+
+.pixel-icon-sm {
+  width: 15px;
+  height: 15px;
+  shape-rendering: crispEdges;
+  flex-shrink: 0;
+}
+
+.junimo-svg {
+  width: 48px;
+  height: 48px;
+  shape-rendering: crispEdges;
+}
+
 /* =========================================
-   NIVEL 1: BARRA SUPERIOR (PESTAÑAS)
+   PESTAÑAS SUPERIORES ESCALONADAS
    ========================================= */
-.top-navbar {
+.top-tabs-bar {
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  padding: 0 1rem;
+  align-items: flex-end;
+  padding: 0 1.25rem;
   gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-bottom: 0.75rem;
-  color: #fff9ea;
-}
-
-.brand-icon {
-  font-size: 1.5rem;
-}
-
-.brand-title {
-  font-size: 1.4rem;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  position: relative;
+  z-index: 3;
 }
 
 .tab-nav {
   display: flex;
   gap: 0.35rem;
+  align-items: flex-end;
 }
 
-.tab-item {
-  background: var(--bg-tab-inactive);
-  color: var(--text-main);
-  text-decoration: none;
-  padding: 0.7rem 1.35rem;
-  border: 3px solid var(--border-wood);
-  border-bottom: none;
-  border-radius: 10px 10px 0 0;
-  font-weight: 700;
-  font-size: 0.95rem;
-  transition: transform 0.15s ease, background-color 0.2s ease;
-}
-
-.tab-item:hover {
-  transform: translateY(-2px);
-  background: #e5d0a1;
-}
-
-.tab-item.active {
-  background: var(--bg-board);
-  position: relative;
-  top: 3px;
-  padding-bottom: 0.9rem;
-  z-index: 2;
-}
-
-.search-box {
-  padding-bottom: 0.65rem;
-}
-
-.search-box input {
-  padding: 0.5rem 0.9rem;
-  border: 2px solid var(--border-wood);
-  border-radius: 20px;
-  background: var(--bg-card);
-  color: var(--text-main);
-  width: 240px;
-  font-size: 0.9rem;
-}
-
-/* =========================================
-   TABLERO PRINCIPAL Y HUD DE GRANJA
-   ========================================= */
-.parchment-board {
-  background: var(--bg-board);
-  border: 3px solid var(--border-wood);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-  position: relative;
-  z-index: 1;
-}
-
-.farm-hud {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  background: var(--bg-hud);
-  border: 2px solid var(--border-soft);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.hud-group {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.hud-field {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.hud-field select,
-.hud-field input {
-  padding: 0.35rem 0.55rem;
-  border: 1.5px solid var(--border-wood);
-  border-radius: var(--radius-sm);
-  background: var(--bg-card);
-  color: var(--text-main);
-  font-weight: 600;
-}
-
-.hud-field input[type="number"] {
-  width: 70px;
-}
-
-.gold-field input[type="number"] {
-  width: 95px;
-}
-
-.pill-toggle {
+.stardew-tab {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: var(--bg-card);
-  border: 1.5px solid var(--border-soft);
-  padding: 0.35rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  gap: 0.45rem;
+  background: var(--parchment);
+  color: var(--text-main);
+  padding: 0.5rem 1rem 0.65rem;
+  border: 3px solid var(--wood-dark);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  box-shadow: inset 0 3px 0 var(--wood-light), inset 3px 0 0 var(--wood-mid), inset -3px 0 0 var(--wood-mid);
+  font-family: var(--font-pixel);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-4px);
+  transition: transform 0.12s ease;
+}
+
+.stardew-tab:hover {
+  transform: translateY(-7px);
+}
+
+.stardew-tab.active {
+  transform: translateY(4px);
+  background: var(--parchment);
+  padding-bottom: 0.85rem;
+  z-index: 4;
+}
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.5rem;
+}
+
+.search-slot input {
+  background: var(--slot-bg);
+  border: 3px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 var(--slot-shadow);
+  padding: 0.35rem 0.7rem;
+  color: var(--text-main);
+  font-family: var(--font-pixel);
+  font-size: 1.25rem;
+  width: 220px;
+}
+
+.close-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--parchment);
+  color: var(--danger);
+  font-family: var(--font-pixel);
+  font-size: 1.6rem;
+  font-weight: bold;
+  border: 3px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 var(--wood-light), inset -2px -2px 0 var(--wood-mid);
   cursor: pointer;
 }
 
-.pill-toggle input {
-  accent-color: var(--accent);
+/* =========================================
+   MARCO PRINCIPAL DE MADERA
+   ========================================= */
+.wood-frame {
+  background: var(--parchment);
+  border: 4px solid var(--wood-dark);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 5px var(--wood-mid),
+    inset 0 0 0 8px var(--wood-dark),
+    0 12px 25px rgba(45, 20, 5, 0.35);
+  padding: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.wood-divider {
+  height: 12px;
+  background: var(--wood-mid);
+  border-top: 3px solid var(--wood-dark);
+  border-bottom: 3px solid var(--wood-dark);
+  box-shadow: inset 0 2px 0 var(--wood-light);
+  margin: 0 -4px;
 }
 
 /* =========================================
-   TARJETAS Y GRID PRINCIPAL
+   PANEL SUPERIOR: HUD DE LA GRANJA + 5 HABILIDADES
    ========================================= */
-.card {
-  background: var(--bg-card);
-  border: 2px solid var(--border-wood);
-  border-radius: var(--radius-md);
-  padding: 1.25rem;
-  box-shadow: 0 3px 0 rgba(110, 63, 25, 0.15);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.card-header h2 {
-  font-size: 1.1rem;
-}
-
-.card-subtitle {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 0.15rem;
-}
-
-/* Fila 1: KPIs */
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.kpi-card {
+.panel-hud {
+  padding: 1rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  border-left: 6px solid var(--accent);
+  gap: 0.9rem;
+}
+
+.hud-top-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.farm-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.avatar-frame {
+  width: 64px;
+  height: 70px;
+  background: linear-gradient(180deg, var(--avatar-sky) 0%, var(--bg-grad-top) 100%);
+  border: 4px solid var(--wood-dark);
+  box-shadow: inset 0 0 0 2px var(--wood-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.farm-name {
+  font-family: var(--font-pixel);
+  font-size: 2.1rem;
+  font-weight: normal;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+
+.save-status {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.farm-stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-pixel);
+  font-size: 1.35rem;
+}
+
+.stat-line {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--slot-bg);
+  border: 2px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 var(--slot-shadow);
+  padding: 0.32rem 0.65rem;
+}
+
+.stat-line input,
+.stat-line select,
+.panel-header select,
+.skill-field select,
+.form-field select,
+.form-field input {
+  background: var(--parchment);
+  border: 2px solid var(--wood-dark);
+  color: var(--text-main);
+  font-family: var(--font-pixel);
+  font-size: 1.25rem;
+  padding: 0.12rem 0.4rem;
+}
+
+.stat-line input[type="number"] {
+  width: 80px;
+  text-align: right;
+}
+
+#day-input {
+  width: 48px;
+}
+
+.date-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Botón de cargar partida */
+.upload-slot {
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.upload-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.85rem;
+  background: var(--accent);
+  color: #fff9ea;
+  border: 3px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.25);
+  font-family: var(--font-pixel);
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.upload-trigger:hover {
+  background: var(--accent-hover);
+}
+
+/* Grid de 5 habilidades */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.65rem;
+}
+
+.skill-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: var(--slot-bg);
+  border: 2px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 var(--slot-shadow);
+  padding: 0.4rem 0.55rem;
+}
+
+.skill-field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+}
+
+.skill-field select {
+  width: 100%;
+  font-size: 1.15rem;
+}
+
+/* =========================================
+   VISTAS DE PESTAÑAS Y COMPONENTES
+   ========================================= */
+.panel-main {
+  padding: 1.25rem;
+}
+
+.tab-view {
+  display: none;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tab-view.active {
+  display: flex;
+}
+
+.inv-slot {
+  background: var(--slot-bg);
+  border: 2px solid var(--wood-dark);
+  box-shadow:
+    inset 3px 3px 0 var(--slot-shadow),
+    inset -2px -2px 0 var(--slot-highlight);
+  padding: 0.85rem;
+  position: relative;
+}
+
+.inv-panel {
+  background: #f3c184;
+  border: 3px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 var(--slot-highlight), inset -2px -2px 0 var(--slot-shadow);
+  padding: 1rem;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.panel-header h2 {
+  font-family: var(--font-pixel);
+  font-size: 1.6rem;
+  font-weight: normal;
+  letter-spacing: 0.4px;
+}
+
+.sub-note {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* KPIs */
+.kpi-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.85rem;
+}
+
+.kpi-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.slot-index {
+  position: absolute;
+  top: 4px;
+  left: 7px;
+  font-family: var(--font-pixel);
+  font-size: 1.1rem;
+  color: var(--text-muted);
 }
 
 .kpi-label {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
+  font-size: 0.78rem;
   font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-left: 1rem;
 }
 
 .kpi-value {
-  font-size: 1.65rem;
-  color: var(--text-main);
+  font-family: var(--font-pixel);
+  font-size: 2rem;
+  line-height: 1.1;
 }
 
 .kpi-sub {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
-}
-
-/* Fila 2: Gráfica + Alertas CC */
-.analytics-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.chart-card select {
-  padding: 0.35rem 0.6rem;
-  border: 1.5px solid var(--border-soft);
-  border-radius: var(--radius-sm);
-  background: var(--bg-board);
-  color: var(--text-main);
   font-weight: 600;
 }
 
+/* Grids internos */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.25rem;
+}
+
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 1.25rem;
+}
+
+/* Gráfica Canvas */
 .chart-container {
-  position: relative;
-  min-height: 280px;
-  background: #fdf6e3;
-  border: 1.5px dashed var(--border-soft);
-  border-radius: var(--radius-sm);
+  background: var(--parchment);
+  border: 2px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 var(--slot-shadow);
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.chart-placeholder {
+#crops-scatter-chart {
+  width: 100%;
+  max-height: 260px;
+  display: block;
+}
+
+.chart-caption {
+  font-size: 0.8rem;
   color: var(--text-muted);
+  margin-top: 0.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Badges y Botones */
+.season-pill {
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-pixel);
+  font-size: 1.2rem;
+  padding: 0.15rem 0.65rem;
+  border: 2px solid var(--wood-dark);
+}
+
+.wood-btn,
+.wood-btn-inline {
+  background: var(--accent);
+  color: #fff9ea;
+  font-family: var(--font-pixel);
+  font-size: 1.3rem;
+  border: 3px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.wood-btn {
+  width: 100%;
+  padding: 0.45rem;
+}
+
+.wood-btn-inline {
+  padding: 0.35rem 0.9rem;
+  white-space: nowrap;
+}
+
+.wood-btn:hover,
+.wood-btn-inline:hover {
+  background: var(--accent-hover);
+}
+
+.btn-mini {
+  background: var(--wood-mid);
+  color: #fff9ea;
+  border: 2px solid var(--wood-dark);
+  font-family: var(--font-pixel);
+  font-size: 1.1rem;
+  padding: 0.1rem 0.5rem;
+  cursor: pointer;
+}
+
+.btn-mini:hover {
+  background: var(--wood-dark);
+}
+
+/* =========================================
+   PESTAÑA ECONOMÍA: AGREGAR CULTIVOS Y TABLA
+   ========================================= */
+.crop-adder-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.85rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 170px;
+}
+
+.form-field.small-field {
+  flex: 0 0 110px;
+  min-width: 100px;
+}
+
+.form-field label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.stardew-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--parchment);
+  border: 2px solid var(--wood-dark);
   font-size: 0.9rem;
 }
 
-/* Alertas Centro Comunitario */
-.badge {
-  font-size: 0.75rem;
+.stardew-table th,
+.stardew-table td {
+  border: 1.5px solid var(--slot-shadow);
+  padding: 0.55rem 0.65rem;
+  text-align: left;
+}
+
+.stardew-table th {
+  background: var(--slot-bg);
+  font-family: var(--font-pixel);
+  font-size: 1.25rem;
+  font-weight: normal;
+}
+
+.status-ok {
+  color: var(--ok-green);
   font-weight: 700;
-  padding: 0.25rem 0.6rem;
-  border-radius: 12px;
+}
+
+.status-late {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+/* =========================================
+   PESTAÑA RELACIONES: COFRE, CALCULADORA Y GRAFO
+   ========================================= */
+.inventory-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.inventory-selector input {
+  flex: 1;
+  background: var(--slot-bg);
+  border: 2px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 var(--slot-shadow);
+  padding: 0.4rem 0.7rem;
+  font-family: var(--font-pixel);
+  font-size: 1.25rem;
+  color: var(--text-main);
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.inv-tag {
   background: var(--accent);
-  color: var(--accent-text);
-  white-space: nowrap;
+  color: #fff9ea;
+  border: 2px solid var(--wood-dark);
+  padding: 0.15rem 0.55rem;
+  font-family: var(--font-pixel);
+  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.inv-tag button {
+  background: none;
+  border: none;
+  color: #fff9ea;
+  font-family: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.villager-matches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 0.65rem;
+}
+
+.villager-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.65rem;
+}
+
+.villager-slot strong {
+  font-family: var(--font-pixel);
+  font-size: 1.45rem;
+  font-weight: normal;
+}
+
+.match-love {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.heart-calc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.calc-inline-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.calc-output {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.92rem;
+}
+
+.shared-graph-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.graph-node-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.graph-node-title {
+  font-family: var(--font-pixel);
+  font-size: 1.45rem;
+  color: var(--accent);
+}
+
+.graph-links {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* =========================================
+   PESTAÑA CENTRO COMUNITARIO
+   ========================================= */
+.rewards-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.85rem;
+}
+
+.reward-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.reward-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.progress-track {
+  height: 14px;
+  background: var(--parchment);
+  border: 2px solid var(--wood-dark);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.25s ease;
 }
 
 .checklist {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.checklist li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--slot-bg);
+  border: 2px solid var(--wood-dark);
+  box-shadow: inset 2px 2px 0 var(--slot-shadow);
 }
 
 .checklist li label {
   display: flex;
   align-items: flex-start;
-  gap: 0.6rem;
-  padding: 0.6rem;
-  background: var(--bg-board);
-  border-radius: var(--radius-sm);
+  gap: 0.5rem;
   cursor: pointer;
+  flex: 1;
 }
 
 .checklist li.completed label {
-  opacity: 0.65;
+  opacity: 0.6;
   text-decoration: line-through;
 }
 
 .checklist input[type="checkbox"] {
-  margin-top: 0.2rem;
   accent-color: var(--accent);
+  margin-top: 0.2rem;
 }
 
 .item-info {
   display: flex;
   flex-direction: column;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .item-info small {
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
 }
 
-.btn-secondary {
-  width: 100%;
-  padding: 0.6rem;
-  background: var(--bg-hud);
-  border: 2px solid var(--border-wood);
-  border-radius: var(--radius-sm);
-  color: var(--text-main);
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+.dependency-box {
+  min-height: 220px;
 }
 
-.btn-secondary:hover {
-  background: var(--bg-tab-inactive);
+.dep-title {
+  font-family: var(--font-pixel);
+  font-size: 1.55rem;
+  margin-bottom: 0.5rem;
 }
 
-/* Fila 3: Buscador Inverso de Relaciones */
-.inventory-selector {
+.dep-steps {
+  list-style: decimal inside;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.inventory-selector input {
-  padding: 0.6rem 0.9rem;
-  border: 1.5px solid var(--border-soft);
-  border-radius: var(--radius-sm);
-  font-size: 0.95rem;
-  max-width: 420px;
-}
-
-.selected-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--accent);
-  color: var(--accent-text);
-  padding: 0.3rem 0.7rem;
-  border-radius: 16px;
-  font-size: 0.85rem;
+  gap: 0.45rem;
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
-.tag button {
-  background: none;
-  border: none;
-  color: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.villager-matches {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.75rem;
-}
-
-.villager-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.75rem;
-  background: var(--bg-board);
-  border: 1.5px solid var(--border-soft);
-  border-radius: var(--radius-sm);
-}
-
-.match-love {
-  font-size: 0.85rem;
-  color: var(--accent);
-  font-weight: 600;
+.dep-empty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 /* =========================================
    RESPONSIVO
    ========================================= */
+@media (max-width: 1024px) {
+  .skills-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
 @media (max-width: 900px) {
-  .analytics-grid {
+  .analytics-grid,
+  .two-col-grid {
     grid-template-columns: 1fr;
   }
 
-  .top-navbar {
+  .top-tabs-bar {
     flex-direction: column;
     align-items: stretch;
   }
 
   .tab-nav {
     overflow-x: auto;
-  }
-
-  .search-box input {
-    width: 100%;
   }
 }
