@@ -110,6 +110,108 @@ const CC_ITEMS = [
   }
 ];
 
+const SKILLS_TREE = [
+  {
+    key: 'farming',
+    label: 'Agricultura',
+    branches: [
+      {
+        lv5: { id: 'rancher', name: 'Ganadero', desc: 'Nv. 5 · +20% productos animales' },
+        lv10: [
+          { id: 'coopmaster', name: 'Avicultor', desc: 'Nv. 10 · Amistad rápida en corral' },
+          { id: 'shepherd', name: 'Pastor', desc: 'Nv. 10 · Amistad rápida en establo' }
+        ]
+      },
+      {
+        lv5: { id: 'tiller', name: 'Labrador', desc: 'Nv. 5 · +10% valor de cultivos' },
+        lv10: [
+          { id: 'artisan', name: 'Artesano', desc: 'Nv. 10 · +40% productos artesanales' },
+          { id: 'agriculturist', name: 'Agricultor', desc: 'Nv. 10 · +10% velocidad de cultivo' }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'mining',
+    label: 'Minería',
+    branches: [
+      {
+        lv5: { id: 'miner', name: 'Minero', desc: 'Nv. 5 · +1 mena por veta' },
+        lv10: [
+          { id: 'blacksmith', name: 'Herrero', desc: 'Nv. 10 · +50% lingotes de metal' },
+          { id: 'prospector', name: 'Prospector', desc: 'Nv. 10 · x2 probabilidad de carbón' }
+        ]
+      },
+      {
+        lv5: { id: 'geologist', name: 'Geólogo', desc: 'Nv. 5 · Probabilidad de gemas dobles' },
+        lv10: [
+          { id: 'excavator', name: 'Excavador', desc: 'Nv. 10 · x2 probabilidad de geodas' },
+          { id: 'gemologist', name: 'Gemólogo', desc: 'Nv. 10 · +30% valor de gemas' }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'foraging',
+    label: 'Recolección',
+    branches: [
+      {
+        lv5: { id: 'forester', name: 'Silvicultor', desc: 'Nv. 5 · +25% madera de árboles' },
+        lv10: [
+          { id: 'lumberjack', name: 'Leñador', desc: 'Nv. 10 · Árboles dan madera noble' },
+          { id: 'tapper', name: 'Resinero', desc: 'Nv. 10 · +25% valor de siropes' }
+        ]
+      },
+      {
+        lv5: { id: 'gatherer', name: 'Recolector', desc: 'Nv. 5 · Probabilidad de doble botín' },
+        lv10: [
+          { id: 'botanist', name: 'Botánico', desc: 'Nv. 10 · Recolección calidad iridio' },
+          { id: 'tracker', name: 'Rastreador', desc: 'Nv. 10 · Marca objetos recolectables' }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'fishing',
+    label: 'Pesca',
+    branches: [
+      {
+        lv5: { id: 'fisher', name: 'Pescador', desc: 'Nv. 5 · +25% valor de peces' },
+        lv10: [
+          { id: 'angler', name: 'Pescador experto', desc: 'Nv. 10 · +50% valor de peces' },
+          { id: 'pirate', name: 'Pirata', desc: 'Nv. 10 · x2 probabilidad de cofres' }
+        ]
+      },
+      {
+        lv5: { id: 'trapper', name: 'Trampero', desc: 'Nv. 5 · Trampas más baratas' },
+        lv10: [
+          { id: 'mariner', name: 'Marinero', desc: 'Nv. 10 · Trampas sin basura' },
+          { id: 'luremaster', name: 'Maestro de cebos', desc: 'Nv. 10 · Trampas sin cebo' }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'combat',
+    label: 'Combate',
+    branches: [
+      {
+        lv5: { id: 'fighter', name: 'Luchador', desc: 'Nv. 5 · +10% daño y +15 salud' },
+        lv10: [
+          { id: 'brute', name: 'Bruto', desc: 'Nv. 10 · +15% daño adicional' },
+          { id: 'defender', name: 'Defensor', desc: 'Nv. 10 · +25 salud adicional' }
+        ]
+      },
+      {
+        lv5: { id: 'scout', name: 'Explorador', desc: 'Nv. 5 · +50% prob. de crítico' },
+        lv10: [
+          { id: 'acrobat', name: 'Acróbata', desc: 'Nv. 10 · -50% recarga movimiento esp.' },
+          { id: 'desperado', name: 'Desperado', desc: 'Nv. 10 · Críticos letales' }
+        ]
+      }
+    ]
+  }
+];
 // =========================================
 // ESTADO DE LA APLICACIÓN
 // =========================================
@@ -120,11 +222,11 @@ const state = {
   budget: 15000,
   processType: 'raw',
   skills: {
-    farming: 'tiller',
-    mining: 'none',
-    foraging: 'none',
-    fishing: 'none',
-    combat: 'none'
+    farming: { lv5: 'tiller', lv10: null },
+    mining: { lv5: null, lv10: null },
+    foraging: { lv5: null, lv10: null },
+    fishing: { lv5: null, lv10: null },
+    combat: { lv5: null, lv10: null }
   },
   activeCropsBySeason: {
     spring: [
@@ -157,7 +259,6 @@ const weatherSelect = document.getElementById('weather-select');
 const budgetInput = document.getElementById('gold-budget');
 const processSelectSummary = document.getElementById('process-type');
 const processSelectEcon = document.getElementById('econ-process-type');
-const skillFarming = document.getElementById('skill-farming');
 
 // =========================================
 // 1. NAVEGACIÓN POR PESTAÑAS
@@ -231,20 +332,24 @@ saveFileInput.addEventListener('change', (e) => {
 // =========================================
 // 3. CÁLCULOS DE ECONOMÍA Y CULTIVOS POR ESTACIÓN
 // =========================================
+function hasFarmingProf(profId) {
+  return state.skills.farming.lv5 === profId || state.skills.farming.lv10 === profId;
+}
+
 function calcCropMetrics(crop, qty) {
   let effectiveGrow = crop.growDays;
-  if (state.skills.farming === 'agriculturist') {
+  if (hasFarmingProf('agriculturist')) {
     effectiveGrow = Math.max(1, Math.floor(crop.growDays * 0.9));
   }
 
   let unitSell = crop.sellPrice;
   if (state.processType === 'keg') {
     unitSell = crop.type === 'fruit' ? crop.sellPrice * 3 : Math.round(crop.sellPrice * 2.25);
-    if (state.skills.farming === 'artisan') unitSell = Math.round(unitSell * 1.4);
+    if (hasFarmingProf('artisan')) unitSell = Math.round(unitSell * 1.4);
   } else if (state.processType === 'jar') {
     unitSell = crop.sellPrice * 2 + 50;
-    if (state.skills.farming === 'artisan') unitSell = Math.round(unitSell * 1.4);
-  } else if (state.skills.farming === 'tiller') {
+    if (hasFarmingProf('artisan')) unitSell = Math.round(unitSell * 1.4);
+  } else if (hasFarmingProf('tiller')) {
     unitSell = Math.round(unitSell * 1.1);
   }
 
@@ -652,15 +757,7 @@ budgetInput.addEventListener('input', (e) => {
   state.budget = Math.max(0, Number(e.target.value) || 0);
 });
 
-['farming', 'mining', 'foraging', 'fishing', 'combat'].forEach((skillKey) => {
-  document.getElementById(`skill-${skillKey}`).addEventListener('change', (e) => {
-    state.skills[skillKey] = e.target.value;
-    if (skillKey === 'farming') {
-      renderEconomyTable();
-      drawScatterChart();
-    }
-  });
-});
+
 
 function syncProcessSelect(val) {
   state.processType = val;
@@ -670,8 +767,148 @@ function syncProcessSelect(val) {
   drawScatterChart();
 }
 
+let openSkillKey = null;
+
+function getSkillSummaryText(skill) {
+  const selected = state.skills[skill.key];
+  const names = [];
+  skill.branches.forEach((branch) => {
+    if (selected.lv5 === branch.lv5.id) names.push(branch.lv5.name);
+    branch.lv10.forEach((p10) => {
+      if (selected.lv10 === p10.id) names.push(p10.name);
+    });
+  });
+  return names.length ? names.join(' + ') : 'Sin profesión';
+}
+
+function renderSkillDropdowns() {
+  const container = document.getElementById('skills-grid');
+  if (!container) return;
+
+  container.innerHTML = SKILLS_TREE.map((skill) => {
+    const selected = state.skills[skill.key];
+    const isOpen = openSkillKey === skill.key;
+
+    const branchesHtml = skill.branches.map((branch) => {
+      const lv5Checked = selected.lv5 === branch.lv5.id;
+      const lv10Html = branch.lv10.map((p10) => {
+        const lv10Checked = lv5Checked && selected.lv10 === p10.id;
+        return `
+          <label class="prof-option ${!lv5Checked ? 'is-disabled' : ''}">
+            <input
+              type="checkbox"
+              data-skill="${skill.key}"
+              data-tier="lv10"
+              data-prof="${p10.id}"
+              ${lv10Checked ? 'checked' : ''}
+              ${!lv5Checked ? 'disabled' : ''}
+            >
+            <span class="prof-text">
+              <strong>${p10.name}</strong>
+              <small>${p10.desc}</small>
+            </span>
+          </label>
+        `;
+      }).join('');
+
+      return `
+        <div class="skill-branch">
+          <label class="prof-option">
+            <input
+              type="checkbox"
+              data-skill="${skill.key}"
+              data-tier="lv5"
+              data-prof="${branch.lv5.id}"
+              ${lv5Checked ? 'checked' : ''}
+            >
+            <span class="prof-text">
+              <strong>${branch.lv5.name}</strong>
+              <small>${branch.lv5.desc}</small>
+            </span>
+          </label>
+          <div class="prof-lv10-group">
+            ${lv10Html}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="skill-dropdown ${isOpen ? 'open' : ''}" data-dropdown="${skill.key}">
+        <button type="button" class="skill-trigger" data-toggle-skill="${skill.key}" aria-expanded="${isOpen}">
+          <span class="skill-trigger-head">
+            <span>${skill.label}</span>
+            <span class="skill-caret">v</span>
+          </span>
+          <span class="skill-summary">${getSkillSummaryText(skill)}</span>
+        </button>
+        <div class="skill-menu">
+          ${branchesHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Abrir / cerrar combo
+  container.querySelectorAll('[data-toggle-skill]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const key = btn.dataset.toggleSkill;
+      openSkillKey = openSkillKey === key ? null : key;
+      renderSkillDropdowns();
+    });
+  });
+
+  // Evitar que clics internos cierren el menú
+  container.querySelectorAll('.skill-menu').forEach((menu) => {
+    menu.addEventListener('click', (e) => e.stopPropagation());
+  });
+
+  // Aplicar restricciones de Nivel 5 -> Nivel 10
+  container.querySelectorAll('input[type="checkbox"][data-skill]').forEach((cb) => {
+    cb.addEventListener('change', () => {
+      const { skill, tier, prof } = cb.dataset;
+      const current = state.skills[skill];
+
+      if (tier === 'lv5') {
+        if (cb.checked) {
+          current.lv5 = prof;
+          current.lv10 = null; // Cambió de rama: se reinicia Nivel 10
+        } else {
+          current.lv5 = null;
+          current.lv10 = null; // Sin Nivel 5 no puede quedar Nivel 10
+        }
+      } else if (tier === 'lv10') {
+        current.lv10 = cb.checked ? prof : null;
+      }
+
+      renderSkillDropdowns();
+      if (skill === 'farming') {
+        renderEconomyTable();
+        drawScatterChart();
+      }
+    });
+  });
+}
+
+// Cerrar menú desplegable al hacer clic fuera o presionar Escape
+document.addEventListener('click', () => {
+  if (openSkillKey !== null) {
+    openSkillKey = null;
+    renderSkillDropdowns();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && openSkillKey !== null) {
+    openSkillKey = null;
+    renderSkillDropdowns();
+  }
+});
+
 processSelectSummary.addEventListener('change', (e) => syncProcessSelect(e.target.value));
 processSelectEcon.addEventListener('change', (e) => syncProcessSelect(e.target.value));
 
 // Inicializar
+renderSkillDropdowns();
 syncAllViews();

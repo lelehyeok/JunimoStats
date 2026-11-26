@@ -17,46 +17,23 @@
     <header class="top-tabs-bar">
       <nav class="tab-nav" aria-label="Navegación principal">
         <button type="button" class="stardew-tab active" data-tab="resumen" title="Resumen">
-          <svg class="pixel-icon" viewBox="0 0 16 16" aria-hidden="true">
-            <rect x="4" y="2" width="8" height="2" fill="#5b2b10"/>
-            <rect x="3" y="4" width="10" height="10" fill="#a83232"/>
-            <rect x="5" y="6" width="6" height="4" fill="#d9534f"/>
-            <rect x="7" y="8" width="2" height="2" fill="#f3ae59"/>
-          </svg>
+          <img class="pixel-icon" src="assets/img/Backpack.png" alt="">
           <span class="tab-label">Resumen</span>
         </button>
 
         <button type="button" class="stardew-tab" data-tab="economia" title="Economía">
-          <svg class="pixel-icon" viewBox="0 0 16 16" aria-hidden="true">
-            <rect x="5" y="2" width="6" height="12" fill="#e6a817"/>
-            <rect x="3" y="4" width="10" height="8" fill="#e6a817"/>
-            <rect x="5" y="4" width="6" height="8" fill="#ffd94a"/>
-            <rect x="7" y="5" width="2" height="6" fill="#cc7628"/>
-          </svg>
+          <img class="pixel-icon" src="assets/img/Gold.png" alt="">
           <span class="tab-label">Economía</span>
         </button>
 
         <button type="button" class="stardew-tab" data-tab="relaciones" title="Relaciones">
-          <svg class="pixel-icon" viewBox="0 0 16 16" aria-hidden="true">
-            <rect x="2" y="4" width="5" height="4" fill="#d63031"/>
-            <rect x="9" y="4" width="5" height="4" fill="#d63031"/>
-            <rect x="3" y="3" width="3" height="1" fill="#d63031"/>
-            <rect x="10" y="3" width="3" height="1" fill="#d63031"/>
-            <rect x="4" y="8" width="8" height="3" fill="#d63031"/>
-            <rect x="6" y="11" width="4" height="2" fill="#d63031"/>
-            <rect x="7" y="13" width="2" height="1" fill="#d63031"/>
-          </svg>
+          <img class="pixel-icon" src="assets/img/HeartIconLarge.png" alt="">
           <span class="tab-label">Relaciones</span>
         </button>
 
-        <button type="button" class="stardew-tab" data-tab="centro-comunitario" title="Centro Comunitario">
-          <svg class="pixel-icon" viewBox="0 0 16 16" aria-hidden="true">
-            <rect x="7" y="1" width="2" height="14" fill="#f1c40f"/>
-            <rect x="1" y="7" width="14" height="2" fill="#f1c40f"/>
-            <rect x="4" y="4" width="8" height="8" fill="#f39c12"/>
-            <rect x="6" y="6" width="4" height="4" fill="#fff59d"/>
-          </svg>
-          <span class="tab-label">Centro Com.</span>
+        <button type="button" class="stardew-tab" data-tab="centro-civico" title="Centro Cívico">
+          <img class="pixel-icon" src="assets/img/Golden_Scroll.png" alt="">
+          <span class="tab-label">Centro Cívico</span>
         </button>
       </nav>
 
@@ -78,18 +55,7 @@
         <div class="hud-top-row">
           <div class="farm-header">
             <div class="avatar-frame" aria-label="Mascota Junimo">
-              <svg class="junimo-svg" viewBox="0 0 16 16" aria-hidden="true">
-                <rect x="7" y="1" width="2" height="2" fill="#3d8b40"/>
-                <rect x="5" y="3" width="6" height="2" fill="#7ed957"/>
-                <rect x="3" y="5" width="10" height="7" fill="#7ed957"/>
-                <rect x="5" y="12" width="6" height="1" fill="#7ed957"/>
-                <rect x="5" y="7" width="2" height="2" fill="#2c1608"/>
-                <rect x="9" y="7" width="2" height="2" fill="#2c1608"/>
-                <rect x="2" y="8" width="1" height="2" fill="#5b2b10"/>
-                <rect x="13" y="8" width="1" height="2" fill="#5b2b10"/>
-                <rect x="5" y="13" width="1" height="2" fill="#5b2b10"/>
-                <rect x="10" y="13" width="1" height="2" fill="#5b2b10"/>
-              </svg>
+              <img class="junimo-sprite" src="assets/img/Junimo.gif" alt="Junimo">
             </div>
             <div class="farm-title-block">
               <h1 class="farm-name" id="farm-display-name">JunimoStats</h1>
@@ -145,72 +111,7 @@
         </div>
 
         <!-- Fila de selectores por cada una de las 5 habilidades -->
-        <div class="skills-grid" aria-label="Profesiones por habilidad">
-          <div class="skill-field">
-            <label for="skill-farming">Agricultura</label>
-            <select id="skill-farming">
-              <option value="none">Sin profesión</option>
-              <option value="tiller" selected>Labrador (+10% cultivos)</option>
-              <option value="artisan">Artesano (+40% artesanales)</option>
-              <option value="agriculturist">Agricultor (+10% velocidad)</option>
-              <option value="rancher">Ranchero (+20% animales)</option>
-              <option value="coopmaster">Avicultor</option>
-              <option value="shepherd">Pastor</option>
-            </select>
-          </div>
-
-          <div class="skill-field">
-            <label for="skill-mining">Minería</label>
-            <select id="skill-mining">
-              <option value="none" selected>Sin profesión</option>
-              <option value="miner">Minero (+1 mena)</option>
-              <option value="blacksmith">Herrero (+50% lingotes)</option>
-              <option value="prospector">Prospector (x2 carbón)</option>
-              <option value="geologist">Geólogo (gemas dobles)</option>
-              <option value="excavator">Excavador (x2 geodas)</option>
-              <option value="gemologist">Gemólogo (+30% gemas)</option>
-            </select>
-          </div>
-
-          <div class="skill-field">
-            <label for="skill-foraging">Recolección</label>
-            <select id="skill-foraging">
-              <option value="none" selected>Sin profesión</option>
-              <option value="forester">Silvicultor (+25% madera)</option>
-              <option value="lumberjack">Leñador (madera noble)</option>
-              <option value="tapper">Sangrador (+25% sirope)</option>
-              <option value="gatherer">Recolector (x2 botín)</option>
-              <option value="botanist">Botánico (calidad iridio)</option>
-              <option value="tracker">Rastreador</option>
-            </select>
-          </div>
-
-          <div class="skill-field">
-            <label for="skill-fishing">Pesca</label>
-            <select id="skill-fishing">
-              <option value="none" selected>Sin profesión</option>
-              <option value="fisher">Pescador (+25% peces)</option>
-              <option value="angler">Anzuelador (+50% peces)</option>
-              <option value="pirate">Pirata (x2 tesoros)</option>
-              <option value="trapper">Trampero</option>
-              <option value="mariner">Marinero (sin basura)</option>
-              <option value="luremaster">Maestro de cebos</option>
-            </select>
-          </div>
-
-          <div class="skill-field">
-            <label for="skill-combat">Combate</label>
-            <select id="skill-combat">
-              <option value="none" selected>Sin profesión</option>
-              <option value="fighter">Luchador (+10% daño)</option>
-              <option value="brute">Bruto (+15% daño)</option>
-              <option value="defender">Defensor (+25 salud)</option>
-              <option value="scout">Explorador (+50% crítico)</option>
-              <option value="acrobat">Acróbata</option>
-              <option value="desperado">Desperado (críticos x2)</option>
-            </select>
-          </div>
-        </div>
+        <div class="skills-grid" id="skills-grid" aria-label="Profesiones por habilidad"></div>
       </section>
 
       <!-- BARRA DIVISORIA HORIZONTAL -->
@@ -242,7 +143,7 @@
 
             <article class="inv-slot kpi-slot">
               <span class="slot-index">3</span>
-              <span class="kpi-label">Centro Comunitario</span>
+              <span class="kpi-label">Centro Cívico</span>
               <strong class="kpi-value" id="kpi-cc-progress">33%</strong>
               <small class="kpi-sub" id="kpi-cc-sub">2 de 6 ítems rastreados</small>
             </article>
@@ -272,7 +173,7 @@
               <ul class="checklist" id="seasonal-cc-list">
                 <!-- Generado dinámicamente por estación -->
               </ul>
-              <button type="button" class="wood-btn" id="goto-cc-btn">Ir al Centro Comunitario</button>
+              <button type="button" class="wood-btn" id="goto-cc-btn">Ir al Centro Cívico</button>
             </article>
           </div>
 
@@ -432,9 +333,9 @@
         </section>
 
         <!-- ================================================
-             PESTAÑA 4: CENTRO COMUNITARIO
+             PESTAÑA 4: CENTRO CIVICO
              ================================================ -->
-        <section id="view-centro-comunitario" class="tab-view">
+        <section id="view-centro-civico" class="tab-view">
           <!-- Progreso por recompensa -->
           <div class="inv-panel">
             <header class="panel-header">
