@@ -15,6 +15,33 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+let cachedConnection = null;
+
+async function connectDB() {
+  if (cachedConnection && mongoose.connection.readyState === 1) {
+    return cachedConnection;
+  }
+  cachedConnection = await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: 'junimostats',
+    serverSelectionTimeoutMS: 5000,
+  });
+  return cachedConnection;
+}
+
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Error al conectar a la base de datos:', error);
+    res.status(500).json({
+      ok: false,
+      message: 'Error de conexión con MongoDB Atlas',
+      error: error.message,
+    });
+  }
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
@@ -23,24 +50,17 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-async function startServer() {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: 'junimostats'
-    });
-    console.log('Conexión a la base de datos establecida correctamente');
-
-    if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
+  connectDB()
+    .then(() => {
+      console.log('Conexión a la base de datos establecida correctamente');
       app.listen(PORT, () => {
         console.log(`Servidor JunimoStats escuchando en el puerto ${PORT}`);
       });
-    }
-  } catch (error) {
-    console.error('Error al conectar a la base de datos:', error);
-    process.exit(1);
-  }
+    })
+    .catch((error) => {
+      console.error('Error al conectar a la base de datos:', error);
+    });
 }
-
-startServer();
 
 export default app;
