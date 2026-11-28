@@ -29,22 +29,22 @@
   --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-/* VERANO: Menta suave + acento barco naranja */
+/* VERANO: Amarillo sol + dorado + acento naranja mango */
 body[data-season="summer"] {
-  --bg-grad-top: #7ec49c;
-  --bg-grad-bottom: #d4f2df;
-  --accent: #d96200;
-  --accent-hover: #a64600;
-  --avatar-sky: #fff275;
+  --bg-grad-top: #fde16d;
+  --bg-grad-bottom: #f9c22e;
+  --accent: #e0820d;
+  --accent-hover: #b86600;
+  --avatar-sky: #f39a1d;
 }
 
-/* OTOÑO: Rojo quemado + naranja calabaza */
+/* OTOÑO: Mocha Brown + Caramel + acento Spice Cyder y Burgundy */
 body[data-season="fall"] {
-  --bg-grad-top: #c92b04;
-  --bg-grad-bottom: #ff7d00;
-  --accent: #b82500;
-  --accent-hover: #871a00;
-  --avatar-sky: #ffd447;
+  --bg-grad-top: #947252;
+  --bg-grad-bottom: #8c5733;
+  --accent: #8a3605;
+  --accent-hover: #421202;
+  --avatar-sky: #cca45f;
 }
 
 /* INVIERNO: Azul cielo/hielo + verde acebo */
@@ -1001,11 +1001,153 @@ body {
   }
 
   .top-tabs-bar {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    padding: 0 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .tab-nav {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Oculta también la barra gris en Firefox */
+  }
+
+  .tab-nav::-webkit-scrollbar {
+    display: none; /* Oculta la barra gris en Chrome, Edge y Safari */
+  }
+
+  .stardew-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+    transform: none;
+    margin-bottom: 4px;
+  }
+
+  .stardew-tab:hover {
+    transform: none;
+  }
+
+  .stardew-tab.active {
+    transform: none;
+    margin-bottom: 0;
+    padding-bottom: 0.75rem;
+  }
+
+  .window-controls {
+    width: 100%;
+    padding-bottom: 0;
+  }
+
+  .search-slot {
+    flex: 1;
+  }
+
+  .search-slot input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 0.5rem;
+  }
+
+  .top-tabs-bar {
+    padding: 0 0.25rem;
+  }
+
+  .stardew-tab {
+    font-size: 1.2rem;
+    padding: 0.45rem 0.75rem 0.6rem;
+  }
+
+  .wood-frame {
+    padding: 8px;
+  }
+
+  .panel-hud,
+  .panel-main {
+    padding: 0.75rem;
+  }
+
+  .hud-top-row {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .tab-nav {
-    overflow-x: auto;
+  .farm-name {
+    font-size: 1.8rem;
+  }
+
+  .farm-stats-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .stat-line {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .upload-trigger {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Habilidades en 1 columna para evitar que el menú desplegable se corte */
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-menu {
+    position: static;
+    min-width: 0;
+    width: 100%;
+    margin-top: 0.35rem;
+  }
+
+  .panel-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .kpi-slots-grid,
+  .rewards-progress-grid,
+  .shared-graph-grid,
+  .calc-inline-row {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-value {
+    font-size: 1.7rem;
+  }
+
+  /* Formularios apilados */
+  .crop-adder-form .form-field,
+  .crop-adder-form .form-field.small-field,
+  .crop-adder-form .wood-btn-inline {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .inventory-selector {
+    flex-direction: column;
+  }
+
+  .inventory-selector .wood-btn-inline {
+    width: 100%;
+  }
+
+  /* Tabla con scroll horizontal limpio */
+  .table-wrap {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .stardew-table th,
+  .stardew-table td {
+    white-space: nowrap;
+    padding: 0.45rem 0.55rem;
   }
 }

@@ -280,7 +280,7 @@ document.querySelectorAll('.stardew-tab').forEach((btn) => {
 });
 
 document.getElementById('reset-view-btn').addEventListener('click', () => switchTab('resumen'));
-document.getElementById('goto-cc-btn').addEventListener('click', () => switchTab('centro-comunitario'));
+document.getElementById('goto-cc-btn').addEventListener('click', () => switchTab('centro-civico'));
 document.getElementById('goto-rel-btn').addEventListener('click', () => switchTab('relaciones'));
 
 // =========================================
