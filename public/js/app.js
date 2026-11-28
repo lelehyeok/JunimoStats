@@ -8,33 +8,38 @@ const SEASON_NAMES = {
   winter: 'Invierno'
 };
 
-const CROPS_CATALOG = {
-  spring: [
-    { id: 'parsnip', name: 'Chirivía', seedCost: 20, sellPrice: 35, growDays: 4, regrow: 0, type: 'veg' },
-    { id: 'cauliflower', name: 'Coliflor', seedCost: 80, sellPrice: 175, growDays: 12, regrow: 0, type: 'veg' },
-    { id: 'potato', name: 'Patata', seedCost: 50, sellPrice: 80, growDays: 6, regrow: 0, type: 'veg' },
-    { id: 'strawberry', name: 'Fresa', seedCost: 100, sellPrice: 120, growDays: 8, regrow: 4, type: 'fruit' },
-    { id: 'kale', name: 'Col rizada', seedCost: 70, sellPrice: 110, growDays: 6, regrow: 0, type: 'veg' }
-  ],
-  summer: [
-    { id: 'melon', name: 'Melón', seedCost: 80, sellPrice: 250, growDays: 12, regrow: 0, type: 'fruit' },
-    { id: 'blueberry', name: 'Arándano', seedCost: 80, sellPrice: 150, growDays: 13, regrow: 4, type: 'fruit' },
-    { id: 'starfruit', name: 'Carambola', seedCost: 400, sellPrice: 750, growDays: 13, regrow: 0, type: 'fruit' },
-    { id: 'hops', name: 'Lúpulo', seedCost: 60, sellPrice: 25, growDays: 11, regrow: 1, type: 'veg' },
-    { id: 'red_cabbage', name: 'Lombarda', seedCost: 100, sellPrice: 260, growDays: 9, regrow: 0, type: 'veg' }
-  ],
-  fall: [
-    { id: 'pumpkin', name: 'Calabaza', seedCost: 100, sellPrice: 320, growDays: 13, regrow: 0, type: 'veg' },
-    { id: 'cranberries', name: 'Grosella', seedCost: 240, sellPrice: 150, growDays: 7, regrow: 5, type: 'fruit' },
-    { id: 'grape', name: 'Uva', seedCost: 60, sellPrice: 80, growDays: 10, regrow: 3, type: 'fruit' },
-    { id: 'artichoke', name: 'Alcachofa', seedCost: 30, sellPrice: 160, growDays: 8, regrow: 0, type: 'veg' },
-    { id: 'sweet_gem', name: 'Baya de gema dulce', seedCost: 1000, sellPrice: 3000, growDays: 24, regrow: 0, type: 'fruit' }
-  ],
-  winter: [
-    { id: 'powdermelon', name: 'Melón de polvo', seedCost: 20, sellPrice: 60, growDays: 7, regrow: 0, type: 'fruit' },
-    { id: 'winter_seeds', name: 'Semillas invernales', seedCost: 30, sellPrice: 75, growDays: 7, regrow: 0, type: 'veg' }
-  ]
-};
+let cropsCatalog = [];
+
+// Traduce un cultivo de la API a la forma que usa el resto del código.
+function adaptCrop(apiCrop) {
+  const typeByCategory = { '-75': 'veg', '-79': 'fruit' };
+  return {
+    id: apiCrop.seedId,
+    name: apiCrop.name.es,
+    seedCost: apiCrop.seedPrice,
+    sellPrice: apiCrop.basePrice,
+    growDays: apiCrop.growthDays,
+    regrow: apiCrop.regrowDays > 0 ? apiCrop.regrowDays : 0, // la API usa -1 para una sola cosecha
+    yieldPerHarvest: apiCrop.harvestMinStack,
+    type: typeByCategory[apiCrop.harvestCategory] || 'other',
+    seasons: apiCrop.seasons
+  };
+}
+
+async function loadCrops() {
+  const response = await fetch('/api/crops');
+  if (!response.ok) throw new Error(`La API respondió ${response.status}`);
+  const apiCrops = await response.json();
+  // Solo los que se compran con oro: la simulación trata de invertir oro en semillas.
+  cropsCatalog = apiCrops
+  .filter((c) => c.seedPrice !== null)
+  .map(adaptCrop)
+  .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+}
+
+function getSeasonCrops(season) {
+  return cropsCatalog.filter((c) => c.seasons.includes(season));
+}
 
 const VILLAGERS = [
   { name: 'Abigail', birthday: { season: 'fall', day: 13 }, loves: ['Amatista', 'Calabaza', 'Pastel de chocolate', 'Pez globo'] },
@@ -228,24 +233,25 @@ const state = {
     fishing: { lv5: null, lv10: null },
     combat: { lv5: null, lv10: null }
   },
+  //antes los ids eran 'parsnip', 'cranberries'... Ahora son los IDs
+  // reales de semilla que devuelve la API. Invierno queda vacío porque casi no hay
+  // semillas que se compren con oro.
   activeCropsBySeason: {
     spring: [
-      { id: 'parsnip', qty: 30 },
-      { id: 'cauliflower', qty: 15 },
-      { id: 'strawberry', qty: 20 }
+      { id: '472', qty: 30 }, // Chirivía
+      { id: '474', qty: 15 }, // Coliflor
+      { id: '745', qty: 20 }  // Fresa
     ],
     summer: [
-      { id: 'melon', qty: 20 },
-      { id: 'blueberry', qty: 25 },
-      { id: 'starfruit', qty: 10 }
+      { id: '479', qty: 20 }, // Melón
+      { id: '481', qty: 25 }, // Arándano
+      { id: '486', qty: 10 }  // Carambola
     ],
     fall: [
-      { id: 'pumpkin', qty: 25 },
-      { id: 'cranberries', qty: 20 }
+      { id: '490', qty: 25 }, // Calabaza
+      { id: '493', qty: 20 }  // Grosella
     ],
-    winter: [
-      { id: 'powdermelon', qty: 20 }
-    ]
+    winter: []
   },
   chestItems: ['Café', 'Amatista', 'Queso de cabra']
 };
@@ -342,11 +348,15 @@ function calcCropMetrics(crop, qty) {
     effectiveGrow = Math.max(1, Math.floor(crop.growDays * 0.9));
   }
 
+  // barril y tarro solo aplican a frutas y verduras; el resto se vende crudo.
+  const canProcess = crop.type === 'fruit' || crop.type === 'veg';
+  const processType = canProcess ? state.processType : 'raw';
+
   let unitSell = crop.sellPrice;
-  if (state.processType === 'keg') {
+  if (processType === 'keg') {
     unitSell = crop.type === 'fruit' ? crop.sellPrice * 3 : Math.round(crop.sellPrice * 2.25);
     if (hasFarmingProf('artisan')) unitSell = Math.round(unitSell * 1.4);
-  } else if (state.processType === 'jar') {
+  } else if (processType === 'jar') {
     unitSell = crop.sellPrice * 2 + 50;
     if (hasFarmingProf('artisan')) unitSell = Math.round(unitSell * 1.4);
   } else if (hasFarmingProf('tiller')) {
@@ -363,10 +373,13 @@ function calcCropMetrics(crop, qty) {
   }
 
   const totalCost = crop.seedCost * qty;
-  const totalRevenue = unitSell * harvests * qty;
+  // ahora se multiplica por las piezas que da cada cosecha (yieldPerHarvest),
+  // en vez de esconderlas dentro del precio de venta como hacía el catálogo antiguo.
+  const totalRevenue = unitSell * harvests * crop.yieldPerHarvest * qty;
   const totalProfit = canHarvest ? totalRevenue - totalCost : -totalCost;
+  // lo mismo en la rentabilidad por día.
   const profitPerDay = canHarvest
-    ? Number(((unitSell * harvests - crop.seedCost) / Math.max(1, daysRemaining)).toFixed(1))
+    ? Number(((unitSell * harvests * crop.yieldPerHarvest - crop.seedCost) / Math.max(1, daysRemaining)).toFixed(1))
     : 0;
   const lastDayToPlant = 28 - effectiveGrow;
 
@@ -383,7 +396,7 @@ function calcCropMetrics(crop, qty) {
 
 function populateCropSelect() {
   const select = document.getElementById('crop-select');
-  const allowed = CROPS_CATALOG[state.season] || [];
+  const allowed = getSeasonCrops(state.season); // antes CROPS_CATALOG[state.season] || []
   select.innerHTML = allowed
     .map((c) => `<option value="${c.id}">${c.name} (${c.seedCost}g · ${c.growDays}d)</option>`)
     .join('');
@@ -391,7 +404,7 @@ function populateCropSelect() {
 
 function renderEconomyTable() {
   const tbody = document.getElementById('active-crops-tbody');
-  const catalog = CROPS_CATALOG[state.season] || [];
+  const catalog = getSeasonCrops(state.season); // antes CROPS_CATALOG[state.season] || []
   const activeList = state.activeCropsBySeason[state.season] || [];
   const daysLeft = 28 - state.day;
 
@@ -399,7 +412,11 @@ function renderEconomyTable() {
   document.getElementById('econ-season-pill').textContent = `Solo cultivos de ${SEASON_NAMES[state.season]}`;
 
   if (activeList.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9">No hay cultivos agregados para esta estación.</td></tr>';
+    //  mensaje especial en invierno, porque casi no hay semillas que comprar con oro.
+    const emptyMessage = state.season === 'winter'
+      ? 'En invierno casi no hay semillas que comprar con oro (solo el higo chumbo); las demás se consiguen por trueque.'
+      : 'No hay cultivos agregados para esta estación.';
+    tbody.innerHTML = `<tr><td colspan="9">${emptyMessage}</td></tr>`;
     return;
   }
 
@@ -470,7 +487,7 @@ function drawScatterChart() {
   const h = canvas.height;
   ctx.clearRect(0, 0, w, h);
 
-  const catalog = CROPS_CATALOG[state.season] || [];
+  const catalog = getSeasonCrops(state.season); //  antes CROPS_CATALOG[state.season] || []
   const activeList = state.activeCropsBySeason[state.season] || [];
   const points = activeList
     .map((entry) => {
@@ -911,4 +928,13 @@ processSelectEcon.addEventListener('change', (e) => syncProcessSelect(e.target.v
 
 // Inicializar
 renderSkillDropdowns();
-syncAllViews();
+
+// los cultivos de la API, y si el servidor falla se avisa en la tabla sin romper el resto.
+loadCrops()
+  .then(() => syncAllViews())
+  .catch((error) => {
+    console.error('No se pudo cargar el catálogo de cultivos:', error);
+    syncAllViews();
+    document.getElementById('active-crops-tbody').innerHTML =
+      '<tr><td colspan="9">No se pudo cargar el catálogo de cultivos. Revisa que el servidor esté funcionando.</td></tr>';
+  });

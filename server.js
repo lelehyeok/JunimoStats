@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cropRoutes from './routes/cropRoutes.js';
 
 dotenv.config();
 
@@ -49,6 +50,8 @@ app.get('/api/health', (req, res) => {
     dbEstado: mongoose.connection.readyState === 1 ? 'Conectado' : 'Desconectado',
   });
 });
+
+app.use('/api/crops', cropRoutes);
 
 if (process.env.NODE_ENV !== 'production') {
   connectDB()
